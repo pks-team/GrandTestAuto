@@ -16,7 +16,7 @@ idea {
     }
     module {
         excludeDirs = [file(".gradle")]
-        ["classes", "dependency-cache", "reports", "resources", "test-results", "tmp"].each {
+        ["classes", "dependency-cache", "libs", "reports", "resources", "test-results", "tmp"].each {
             excludeDirs << file("$buildDir/$it")
         }
     }
