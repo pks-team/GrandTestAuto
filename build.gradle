@@ -1,0 +1,67 @@
+apply plugin: 'maven'
+apply plugin: 'java'
+
+ext {
+    generatedSrcPath = "$buildDir/generatedSrc"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.apache.ant:ant:1.9.6'
+    compile 'commons-io:commons-io:2.4'
+}
+
+configurations {
+    tools
+    tools.extendsFrom compile
+}
+
+sourceSets {
+    tools {
+        java {
+            srcDirs = ["$projectDir/src/test"]
+            include ('**/test/tools/*.java')
+            output.classesDir = "$buildDir/classes/test"
+        }
+        compileClasspath += configurations.compile
+    }
+    test {
+        java {
+            srcDirs = ["$projectDir/src/test", generatedSrcPath]
+            exclude ('**/test/tools/*.java')
+            output.classesDir = "$buildDir/classes/test"
+        }
+        compileClasspath += configurations.tools
+    }
+}
+
+task sourceJar(type: Jar) {
+    description = 'Builds a source jar artifact'
+    classifier = 'sources'
+    from sourceSets.main.java
+}
+build.dependsOn sourceJar
+
+task tcg {
+    def outputDir = file(generatedSrcPath)
+    outputs.dir outputDir
+    doFirst {
+        outputDir.exists() || outputDir.mkdirs()
+        javaexec {
+            main = 'org.grandtestauto.test.tools.TestDataClassGenerator'
+            maxHeapSize = "384m"
+            classpath = project.sourceSets.main.compileClasspath + project.sourceSets.tools.compileClasspath + project.sourceSets.tools.output
+            args = ["$outputDir", "org.grandtestauto.test.dataconstants", "$projectDir/src/test/resources"]
+        }
+    }
+}
+tcg.dependsOn compileToolsJava
+compileTestJava.dependsOn compileToolsJava, tcg
+
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.10'
+}
