@@ -64,6 +64,7 @@ public abstract class SettingsSpecification {
     private NameFilter packageNameFilter = new NameFilter(NameFilter.Type.PACKAGE, null, null, null);
     private NameFilter classNameFilter = new NameFilter(NameFilter.Type.CLASS, null, null, null);
     private NameFilter methodNameFilter = new NameFilter(NameFilter.Type.METHOD, null, null, null);
+    private boolean teamCityOutput = false;
 
     public SettingsSpecification() {
         settings.add(new ClassesRoot());
@@ -78,6 +79,7 @@ public abstract class SettingsSpecification {
         settings.add(new RunFunctionTests());
         settings.add(new RunLoadTests());
         settings.add(new StopAtFirstFailure());
+        settings.add(new TeamCityOutput());
         settings.add(new FirstClass());
         settings.add(new LastClass());
         settings.add(new SingleClass());
@@ -259,6 +261,10 @@ public abstract class SettingsSpecification {
         stopAtFirstFailure = value;
     }
 
+    void setTeamCityOutput(Boolean value) {
+        teamCityOutput = value;
+    }
+
     void setLessVerboseLogging(Boolean value) {
         lessVerboseLogging = value;
     }
@@ -269,6 +275,13 @@ public abstract class SettingsSpecification {
      */
     public boolean stopAtFirstFailure() {
         return stopAtFirstFailure;
+    }
+
+    /**
+     * Should gta print the results in TeamCity format?
+     */
+    public boolean teamCityOutput() {
+        return teamCityOutput;
     }
 
     /**

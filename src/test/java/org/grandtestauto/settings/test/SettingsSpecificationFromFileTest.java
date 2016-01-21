@@ -100,8 +100,9 @@ public class SettingsSpecificationFromFileTest {
     public boolean constructor_String_Test() throws Exception {
         //Pretty cursory test as this is tested elsewhere.
         File settingsFile = new File(Grandtestauto.Settings1_txt);
+        new File("classes/org/grandtestauto").mkdirs();
         SettingsSpecificationFromFile settings = new SettingsSpecificationFromFile(settingsFile.getAbsolutePath());
-        Assert.aequals(settings.singlePackageName(), "org.grandtestauto");
+        Assert.aequals(settings.singlePackageName(), "org.grandtestauto"); //TODO this does not work, should it translate o.g to org.grandtestauto when such package exists?
         Assert.azzert(settings.runUnitTests());
         Assert.azzertFalse(settings.runFunctionTests());
         Assert.azzertFalse(settings.runLoadTests());

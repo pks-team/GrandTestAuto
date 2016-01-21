@@ -50,6 +50,7 @@ public class Messages {
     public static final String SK_RUNNING_FUNCTION_TESTS = "SK_RUNNING_FUNCTION_TESTS";
     public static final String SK_RUNNING_LOAD_TESTS = "SK_RUNNING_LOAD_TESTS";
     public static final String SK_FAIL_FAST = "SK_FAIL_FAST";
+    public static final String SK_TEAMCITY_OUTPUT = "SK_TEAMCITY_OUTPUT";
     public static final String SK_FAIL_FAST_UNIT_TESTS = "SK_FAIL_FAST_UNIT_TESTS";
     public static final String SK_FAIL_FAST_FUNCTION_TESTS = "SK_FAIL_FAST_FUNCTION_TESTS";
     public static final String SK_FAIL_FAST_SKIP_FUNCTION_TESTS = "SK_FAIL_FAST_SKIP_FUNCTION_TESTS";
