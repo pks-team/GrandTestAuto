@@ -98,7 +98,7 @@ task gta {
             main = 'org.grandtestauto.GrandTestAuto'
             maxHeapSize = "384m"
             classpath = project.sourceSets.test.runtimeClasspath + files(classesRoot, prod, tests)
-            args = ['GTARunOne.txt']
+            args = ['GTARunAll.txt']
             systemProperties = [
                     'TestDataRoot': "$buildDir/resources/test",
                     'user.dir'    : "$buildDir/run"
