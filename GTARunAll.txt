@@ -1,4 +1,5 @@
-CLASSES_ROOT=./classes
+CLASSES_ROOT=build/classes/test
+PROD_ROOT=build/classes/main
 LOG_FILE_NAME=AllTestResults.txt
 
 SINGLE_PACKAGE=

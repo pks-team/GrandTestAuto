@@ -1,8 +1,28 @@
 apply plugin: 'maven'
 apply plugin: 'java'
+apply plugin: 'idea'
 
+sourceCompatibility = 1.8
 ext {
     generatedSrcPath = "$buildDir/generatedSrc"
+    userDir = file("$buildDir/run")
+    classesRoot = new File(userDir, "testtemp/classesroot")
+    prod = new File(userDir, "testtemp2/prod")
+    tests = new File(userDir, "testtemp2/tests")
+}
+
+idea {
+    project {
+        jdkName = '1.8'
+        languageLevel = "$sourceCompatibility"
+        vcs = 'Git'
+    }
+    module {
+        excludeDirs = [file(".gradle")]
+        ["classes", "dependency-cache", "reports", "resources", "test-results", "tmp"].each {
+            excludeDirs << file("$buildDir/$it")
+        }
+    }
 }
 
 repositories {
@@ -21,20 +41,26 @@ configurations {
 
 sourceSets {
     tools {
+        output.classesDir = "$buildDir/classes/test"
         java {
-            srcDirs = ["$projectDir/src/test"]
-            include ('**/test/tools/*.java')
-            output.classesDir = "$buildDir/classes/test"
+            srcDirs = ["$projectDir/src/test/java"]
+            include '**/test/tools/*.java'
         }
         compileClasspath += configurations.compile
     }
     test {
+//        output.classesDir = "$buildDir/classes/test"
+//        output.resourcesDir = "$buildDir/resources/test"
         java {
-            srcDirs = ["$projectDir/src/test", generatedSrcPath]
-            exclude ('**/test/tools/*.java')
-            output.classesDir = "$buildDir/classes/test"
+            srcDirs = ["$projectDir/src/test/java", generatedSrcPath]
+            exclude '**/test/tools/*.java'
         }
-        compileClasspath += configurations.tools
+//        resources {
+//            srcDirs = ["$projectDir/src/test/resources"]
+////            include '**/*'
+//        }
+        compileClasspath += configurations.tools + files("$buildDir/classes/test")
+        runtimeClasspath = compileClasspath + files(classesRoot, prod, tests)
     }
 }
 
@@ -61,6 +87,27 @@ task tcg {
 tcg.dependsOn compileToolsJava
 compileTestJava.dependsOn compileToolsJava, tcg
 
+task gta {
+    doFirst {
+        userDir.exists() || userDir.mkdirs()
+        userDir.exists() || classesRoot.mkdirs()
+        userDir.exists() || prod.mkdirs()
+        userDir.exists() || tests.mkdirs()
+
+        javaexec {
+            main = 'org.grandtestauto.GrandTestAuto'
+            maxHeapSize = "384m"
+            classpath = project.sourceSets.test.runtimeClasspath
+            args = ['GTARunOne.txt']
+            systemProperties = [
+                    'TestDataRoot': "$buildDir/resources/test",
+                    'user.dir' : "$buildDir/run"
+            ]
+        }
+    }
+}
+gta.dependsOn testClasses
+test.dependsOn gta
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.10'
