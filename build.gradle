@@ -6,9 +6,6 @@ sourceCompatibility = 1.8
 ext {
     generatedSrcPath = "$buildDir/generatedSrc"
     userDir = file("$buildDir/run")
-    classesRoot = new File(userDir, "testtemp/classesroot")
-    prod = new File(userDir, "testtemp2/prod")
-    tests = new File(userDir, "testtemp2/tests")
 }
 
 idea {
@@ -60,7 +57,6 @@ sourceSets {
 ////            include '**/*'
 //        }
         compileClasspath += configurations.tools + files("$buildDir/classes/test")
-        runtimeClasspath = compileClasspath + files(classesRoot, prod, tests)
     }
 }
 
@@ -89,19 +85,23 @@ compileTestJava.dependsOn compileToolsJava, tcg
 
 task gta {
     doFirst {
+        def classesRoot = new File(userDir, "testtemp/classesroot/.")
+        def prod = new File(userDir, "testtemp2/prod/.")
+        def tests = new File(userDir, "testtemp2/tests/.")
+
         userDir.exists() || userDir.mkdirs()
-        userDir.exists() || classesRoot.mkdirs()
-        userDir.exists() || prod.mkdirs()
-        userDir.exists() || tests.mkdirs()
+        classesRoot.exists() || classesRoot.mkdirs()
+        prod.exists() || prod.mkdirs()
+        tests.exists() || tests.mkdirs()
 
         javaexec {
             main = 'org.grandtestauto.GrandTestAuto'
             maxHeapSize = "384m"
-            classpath = project.sourceSets.test.runtimeClasspath
+            classpath = project.sourceSets.test.runtimeClasspath + files(classesRoot, prod, tests)
             args = ['GTARunOne.txt']
             systemProperties = [
                     'TestDataRoot': "$buildDir/resources/test",
-                    'user.dir' : "$buildDir/run"
+                    'user.dir'    : "$buildDir/run"
             ]
         }
     }
