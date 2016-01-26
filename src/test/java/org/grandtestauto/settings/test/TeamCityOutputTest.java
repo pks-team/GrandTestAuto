@@ -29,15 +29,13 @@ import java.util.Properties;
  */
 public class TeamCityOutputTest extends SettingTestBase {
 
-    public static final boolean EXPECTED = System.getenv("TEAMCITY_CAPTURE_ENV") != null;
-
     public boolean buildFromTest() {
         init();
         Properties properties = new Properties();
         TeamCityOutput teamCityOutput = new TeamCityOutput();
         teamCityOutput.buildFrom(properties);
         teamCityOutput.addTo(settings);
-        Assert.equalz(settings.teamCityOutput(), EXPECTED);
+        Assert.equalz(settings.teamCityOutput(), false);
 
         settings = new DummySettings();
         properties = new Properties();
@@ -69,7 +67,7 @@ public class TeamCityOutputTest extends SettingTestBase {
         teamCityOutput = new TeamCityOutput();
         teamCityOutput.buildFrom(properties);
         teamCityOutput.addTo(settings);
-        Assert.equalz(settings.teamCityOutput(), EXPECTED);
+        Assert.equalz(settings.teamCityOutput(), false);
         return true;
     }
 
