@@ -22,21 +22,8 @@ import java.util.Properties;
 /**
  * @author Martin Varga
  */
-public class TeamCityOutput implements Setting {
+public class TeamCityOutput extends BooleanSetting {
     public static final String TEAMCITY_OUTPUT = "TEAMCITY_OUTPUT";
-
-    boolean value = false;
-
-    public void buildFrom(Properties properties) {
-        String teamCityOutputSetting = properties.getProperty(TEAMCITY_OUTPUT, "auto").toLowerCase().trim();
-        if ("false".equals(teamCityOutputSetting) || "f".equals(teamCityOutputSetting)) {
-            value = false;
-        } else if ("true".equals(teamCityOutputSetting) || "t".equals(teamCityOutputSetting)) {
-            value = true;
-        } else {
-            value = System.getenv("TEAMCITY_CAPTURE_ENV") != null;
-        }
-    }
 
     public void addTo(SettingsSpecification settings) {
         settings.setTeamCityOutput(value);
@@ -49,7 +36,7 @@ public class TeamCityOutput implements Setting {
 
     @Override
     public Object valueInUserExplanation(SettingsSpecification settings) {
-        return null;
+        return settings.teamCityOutput();
     }
 }
 

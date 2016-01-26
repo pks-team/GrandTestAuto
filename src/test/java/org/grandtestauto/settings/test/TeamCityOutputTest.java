@@ -110,7 +110,7 @@ public class TeamCityOutputTest extends SettingTestBase {
     public boolean valueInUserExplanationTest() {
         init();
         TeamCityOutput teamCityOutput = new TeamCityOutput();
-        Assert.azzertNull(teamCityOutput.valueInUserExplanation(settings));
+        Assert.aequals(false, teamCityOutput.valueInUserExplanation(settings));
 
         return true;
     }

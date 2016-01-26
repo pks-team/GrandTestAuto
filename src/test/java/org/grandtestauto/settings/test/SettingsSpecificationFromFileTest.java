@@ -97,15 +97,32 @@ public class SettingsSpecificationFromFileTest {
         return true;
     }
 
+    public boolean teamCityOutputTest() throws Exception {
+        settings = new SettingsSpecificationFromFile();
+        Assert.azzertFalse(settings.teamCityOutput());
+
+        Properties properties = new Properties();
+        properties.put(TeamCityOutput.TEAMCITY_OUTPUT, "t");
+        File propertiesFile = new File(Helpers.tempDirectory(), "TCO.txt");
+        properties.store(new FileWriter(propertiesFile), "Test");
+        settings = new SettingsSpecificationFromFile(propertiesFile.getAbsolutePath());
+        Assert.azzert(settings.teamCityOutput());
+        return true;
+    }
+
     public boolean constructor_String_Test() throws Exception {
         //Pretty cursory test as this is tested elsewhere.
-        File settingsFile = new File(Grandtestauto.Settings1_txt);
-        new File("classes/org/grandtestauto").mkdirs();
+        File testClassesRoot = Helpers.classesDirClassic();
+        File settingsFile = new File(Helpers.tempDirectory(), "TestSettings.txt");
+        Properties props = new Properties();
+        props.put(ClassesRoot.CLASSES_ROOT, testClassesRoot.getAbsolutePath());
+        props.put(RunFunctionTests.RUN_FUNCTION_TESTS, "f");
+        props.store(new FileWriter(settingsFile), "Just testing");
+
         SettingsSpecificationFromFile settings = new SettingsSpecificationFromFile(settingsFile.getAbsolutePath());
-        Assert.aequals(settings.singlePackageName(), "org.grandtestauto"); //TODO this does not work, should it translate o.g to org.grandtestauto when such package exists?
         Assert.azzert(settings.runUnitTests());
         Assert.azzertFalse(settings.runFunctionTests());
-        Assert.azzertFalse(settings.runLoadTests());
+        Assert.azzert(settings.runLoadTests());
         return true;
     }
 
