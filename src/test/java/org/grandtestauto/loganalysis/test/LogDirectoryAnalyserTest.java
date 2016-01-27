@@ -186,25 +186,5 @@ public class LogDirectoryAnalyserTest {
             loggedMessages.add(message);
             loggedExceptions.add(t);
         }
-
-        @Override public void logSuiteStarted(String suiteName) {
-
-        }
-
-        @Override public void logSuiteFinished(String suiteName) {
-
-        }
-
-        @Override public void logTestStarted(String testName) {
-
-        }
-
-        @Override public void logTestFinished(String testName, long duration) {
-
-        }
-
-        @Override public void closeLogger() {
-
-        }
     }
 }

@@ -157,7 +157,7 @@ public abstract class Coverage {
     abstract PackageInfo productionPackageInfo();
     abstract boolean doTestsForClass(Class klass, @Nullable ClassAnalyser analyser) throws InvocationTargetException ;
     @NotNull
-    abstract GTALogger resultsLogger();
+    abstract ResultsLogger resultsLogger();
     abstract void testingError(String str, Exception e);
 
     /**
@@ -194,9 +194,9 @@ public abstract class Coverage {
         boolean result = true;
         try {
             Class testClass = Class.forName( testClassName );
-            resultsLogger().logSuiteStarted(testClass.getName());//todo check with Tim
+            TeamCityOutputLogger.logSuiteStarted(testClass.getName());//todo check with Tim
             result &= doTestsForClass(testClass,analyser);
-            resultsLogger().logSuiteFinished(testClass.getName());
+            TeamCityOutputLogger.logSuiteFinished(testClass.getName());
         } catch (ClassNotFoundException cnfe) {
             if (testability.equals( Testability.TEST_REQUIRED )) {
                 //There is no test class defined. Record this and cause failure.

@@ -59,6 +59,16 @@ public class TeamCityOutputLoggerTest {
         return true;
     }
 
+    public boolean logTestFailedTest() throws IOException {
+        init();
+        TeamCityOutputLogger logger = new TeamCityOutputLogger();
+        logger.logTestFailed("constructorTest", "Assertion error", "expected 4, got 5");
+        String actual = testOutputStream.toString();
+        assertThat(actual.trim()).isEqualTo("##teamcity[testFailed name='constructorTest' message='Assertion error' details='expected 4, got 5']");
+        cleanup();
+        return true;
+    }
+
     private void init() {
         originalPrintStream = System.out;
         testOutputStream = new ByteArrayOutputStream();

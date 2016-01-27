@@ -1,9 +1,9 @@
 package org.grandtestauto.test;
 
 import org.apache.commons.io.FileUtils;
+import org.assertj.core.api.Assertions;
 import org.grandtestauto.GrandTestAuto;
 import org.grandtestauto.TeamCityOutputLogger;
-import org.grandtestauto.assertion.Assert;
 import org.grandtestauto.settings.ResultsFileName;
 import org.grandtestauto.settings.SettingsSpecification;
 import org.grandtestauto.settings.SettingsSpecificationFromFile;
@@ -68,8 +68,9 @@ public class GrandTestAutoTest {
         properties.store(new FileWriter(propertiesFile), "Test");
         SettingsSpecification settings = new SettingsSpecificationFromFile(propertiesFile.getAbsolutePath());
 
-        GrandTestAuto grandTestAuto = new GrandTestAuto(settings);
-        Assert.azzert(grandTestAuto.resultsLogger() instanceof TeamCityOutputLogger);
+        Assertions.assertThat(TeamCityOutputLogger.isEnabled()).isFalse();
+        new GrandTestAuto(settings);
+        Assertions.assertThat(TeamCityOutputLogger.isEnabled()).isTrue();
         return true;
     }
 

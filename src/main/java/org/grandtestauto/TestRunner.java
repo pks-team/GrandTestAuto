@@ -13,6 +13,8 @@ import org.grandtestauto.util.Stopwatch;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -86,25 +88,24 @@ class TestRunner {
                 continue;
             }
             //Run the test method. If it is annotated as Flaky, run multiple times.
-            int repeats = StaticUtils.flakyRepeats(testMethod);
+            int maxRetries = StaticUtils.flakyRepeats(testMethod);
             Integer pauseOnException = StaticUtils.pauseOnException(testMethod);
             boolean resultForMethod = false;
-            for (int i = 1; !resultForMethod && i <= repeats; i++) {
+            for (int i = 1; !resultForMethod && i <= maxRetries; i++) {
                 if (i > 1) {
                     cut.resultsLogger().log(Messages.message(Messages.TPK_RUNNING_TEST_AGAIN, testMethod.getName(), "" + i), null);
                 }
+                Stopwatch stopWatch = new Stopwatch();
                 try {
-                    cut.resultsLogger().logTestStarted(testMethod.getName());
-                    Stopwatch stopWatch = new Stopwatch();
+                    TeamCityOutputLogger.logTestStarted(testMethod.getName());
                     stopWatch.start();
                     resultForMethod = invoker.invoke(testMethod, testObj);
                     stopWatch.stop();
-                    cut.resultsLogger().logTestFinished(testMethod.getName(), stopWatch.times().get(0));
                     //Record the method as tested.
                     if (analyser != null) {
                         analyser.recordTestDone(testMethod.getName(), cut.accountant());
                     }
-                    reportTestResult(cut, testMethod, resultForMethod, i, repeats);
+                    reportTestResult(cut, testMethod, resultForMethod, i, maxRetries, null);
                 } catch (IllegalAccessException iae) {
                     //This is an error in the Unit  test.
                     cut.testingError(Messages.message(Messages.OPK_COULD_NOT_RUN_TEST_METHOD, testMethod.getName()), iae);
@@ -114,7 +115,7 @@ class TestRunner {
                     //and count this as the test failing.
                     ita.getCause().printStackTrace();
 //                    result = false;
-                    reportTestResult(cut, testMethod, false, i, repeats);
+                    reportTestResult(cut, testMethod, false, i, maxRetries, ita.getCause());
                     //If the class or the test method is annotated with PauseOnException, pause.
                     StaticUtils.pauseOnException(pauseOnExceptionForClass, cut.resultsLogger());
                     StaticUtils.pauseOnException(pauseOnException, cut.resultsLogger());
@@ -138,13 +139,14 @@ class TestRunner {
                 }
                 //Record that there is a test for the method (even if it failed).
                 cut.accountant().testFound(testMethod);
+                TeamCityOutputLogger.logTestFinished(testMethod.getName(), stopWatch.times().get(0));
             }
             result &= resultForMethod;
         }
         return result;
     }
 
-    private void reportTestResult(Coverage cut, Method testMethod, boolean resultForMethod, int i, int limit) {
+    private void reportTestResult(Coverage cut, Method testMethod, boolean resultForMethod, int i, int limit, Throwable cause) {
         //Report it if it is a positive result....
         if (resultForMethod) {
             cut.reportResult(testMethod, resultForMethod);
@@ -152,7 +154,13 @@ class TestRunner {
         }
 
         //....or if we're about to give up.
-        if (i == limit) cut.reportResult(testMethod, resultForMethod);
+        if (i == limit) {
+            cut.reportResult(testMethod, resultForMethod);
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            cause.printStackTrace(new PrintStream(stream));
+            TeamCityOutputLogger.logTestFailed(testMethod.getName(), cause.getMessage(), new String(stream.toByteArray()));
+        }
     }
 
     private boolean isTestMethod(Method m) {

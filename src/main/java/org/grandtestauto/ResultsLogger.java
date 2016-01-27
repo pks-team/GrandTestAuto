@@ -58,22 +58,6 @@ public class ResultsLogger implements GTALogger {
         }
     }
 
-    @Override public void logSuiteStarted(String suiteName) {
-        //todo FLL & TL
-    }
-
-    @Override public void logSuiteFinished(String suiteName) {
-        //todo FLL & TL
-    }
-
-    @Override public void logTestStarted(String testName) {
-        //todo FLL & TL
-    }
-
-    @Override public void logTestFinished(String testName, long duration) {
-        //todo FLL & TL
-    }
-
     /**
      * Flush and close the handlers..
      */

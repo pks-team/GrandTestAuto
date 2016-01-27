@@ -1,21 +1,19 @@
 /****************************************************************************
- *
  * Name: GrandTestAuto.java
- *
+ * <p>
  * Synopsis: See javadoc class comments.
- *
+ * <p>
  * Description: See javadoc class comments.
- *
+ * <p>
  * Copyright 2002 Timothy Gordon Lavers (Australia)
- *
- *                          The Wide Open License (WOL)
- *
+ * <p>
+ * The Wide Open License (WOL)
+ * <p>
  * Permission to use, copy, modify, distribute and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
  * the above copyright notice and this license appear in all source copies.
  * THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT EXPRESS OR IMPLIED WARRANTY OF
  * ANY KIND. See http://www.dspguru.com/wol.htm for more information.
- *
  *****************************************************************************/
 package org.grandtestauto;
 
@@ -47,7 +45,7 @@ public class GrandTestAuto {
      */
     private SettingsSpecification settings;
 
-    private GTALogger resultsLogger;
+    private ResultsLogger resultsLogger;
 
     /**
      * Information about the packages in the project.
@@ -149,14 +147,13 @@ public class GrandTestAuto {
         this(settings, dpw, createLogger(settings));
     }
 
-    @NotNull private static GTALogger createLogger(SettingsSpecification settings) {
-        if (settings.teamCityOutput()) {
-            return new TeamCityOutputLogger();
-        }
+    @NotNull
+    private static ResultsLogger createLogger(SettingsSpecification settings) {
+        TeamCityOutputLogger.setEnabled(settings.teamCityOutput());
         return new ResultsLogger(settings.resultsFileName(), settings.logToConsole());
     }
 
-    GrandTestAuto(final SettingsSpecification settingsSpecification, DoPackageWork dpw, GTALogger resultsLogger) {
+    GrandTestAuto(final SettingsSpecification settingsSpecification, DoPackageWork dpw, ResultsLogger resultsLogger) {
         settings = settingsSpecification;
         this.resultsLogger = resultsLogger;
         productionPackagesInfo = new PackagesInfo<PackageInfo>(packageName -> settings.packageNameFilter().accept(packageName) && PackagesInfo.namesPackageThatMightNeedUnitTests(packageName), settings.productionClassesDir()) {
@@ -216,7 +213,7 @@ public class GrandTestAuto {
         return result;
     }
 
-    public GTALogger resultsLogger() {
+    public ResultsLogger resultsLogger() {
         return resultsLogger;
     }
 

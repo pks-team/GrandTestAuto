@@ -23,7 +23,7 @@ class RunsTestsInPackages extends DPWImpl {
     Boolean invokeRun(String packageName, UnitTesterIF ut) {
         Boolean runResult;
         try {
-            gta.resultsLogger().logSuiteStarted(packageName);// todo check with Tim
+            TeamCityOutputLogger.logSuiteStarted(packageName);// todo check with Tim
             runResult = ut.runTests();
         } catch (Throwable e) {
             e.printStackTrace();
@@ -31,7 +31,7 @@ class RunsTestsInPackages extends DPWImpl {
             gta.resultsLogger().log(msg, null);
             runResult = false;
         }
-        gta.resultsLogger().logSuiteFinished(packageName);// todo check with Tim
+        TeamCityOutputLogger.logSuiteFinished(packageName);// todo check with Tim
         return runResult;
     }
 
