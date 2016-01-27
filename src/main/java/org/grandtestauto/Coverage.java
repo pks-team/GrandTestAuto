@@ -194,9 +194,7 @@ public abstract class Coverage {
         boolean result = true;
         try {
             Class testClass = Class.forName( testClassName );
-            TeamCityOutputLogger.logSuiteStarted(testClass.getName());//todo check with Tim
             result &= doTestsForClass(testClass,analyser);
-            TeamCityOutputLogger.logSuiteFinished(testClass.getName());
         } catch (ClassNotFoundException cnfe) {
             if (testability.equals( Testability.TEST_REQUIRED )) {
                 //There is no test class defined. Record this and cause failure.

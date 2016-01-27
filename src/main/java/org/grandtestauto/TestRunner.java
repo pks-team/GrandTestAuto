@@ -64,7 +64,7 @@ class TestRunner {
         pauseOnExceptionForClass = StaticUtils.pauseOnException(testClass);
     }
 
-    boolean runTestMethods(@NotNull Coverage cut, @Nullable ClassAnalyser analyser) {
+    boolean runTestMethods(@NotNull Coverage cut, @Nullable ClassAnalyser analyser, boolean teamCityLoggingEnabled) {
         boolean result = true;
         //Object to call the test methods on.
         Object testObj = null;
@@ -97,7 +97,7 @@ class TestRunner {
                 }
                 Stopwatch stopWatch = new Stopwatch();
                 try {
-                    TeamCityOutputLogger.logTestStarted(testMethod.getName());
+                    if (teamCityLoggingEnabled) TeamCityOutputLogger.logTestStarted(testMethod.getName());
                     stopWatch.start();
                     resultForMethod = invoker.invoke(testMethod, testObj);
                     stopWatch.stop();
@@ -116,6 +116,11 @@ class TestRunner {
                     ita.getCause().printStackTrace();
 //                    result = false;
                     reportTestResult(cut, testMethod, false, i, maxRetries, ita.getCause());
+                    if (i == maxRetries && teamCityLoggingEnabled) {
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        ita.getCause().printStackTrace(new PrintStream(stream));
+                        TeamCityOutputLogger.logTestFailed(testMethod.getName(), ita.getCause().getMessage(), new String(stream.toByteArray()));
+                    }
                     //If the class or the test method is annotated with PauseOnException, pause.
                     StaticUtils.pauseOnException(pauseOnExceptionForClass, cut.resultsLogger());
                     StaticUtils.pauseOnException(pauseOnException, cut.resultsLogger());
@@ -139,7 +144,8 @@ class TestRunner {
                 }
                 //Record that there is a test for the method (even if it failed).
                 cut.accountant().testFound(testMethod);
-                TeamCityOutputLogger.logTestFinished(testMethod.getName(), stopWatch.times().get(0));
+                if (teamCityLoggingEnabled)
+                    TeamCityOutputLogger.logTestFinished(testMethod.getName(), stopWatch.times().get(0));
             }
             result &= resultForMethod;
         }
@@ -156,10 +162,6 @@ class TestRunner {
         //....or if we're about to give up.
         if (i == limit) {
             cut.reportResult(testMethod, resultForMethod);
-
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            cause.printStackTrace(new PrintStream(stream));
-            TeamCityOutputLogger.logTestFailed(testMethod.getName(), cause.getMessage(), new String(stream.toByteArray()));
         }
     }
 

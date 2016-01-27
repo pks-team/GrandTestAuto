@@ -93,10 +93,17 @@ public class CoverageUnitTester extends Coverage implements UnitTesterIF {
 
     @Override
     boolean doTestsForClass(Class testClass, @Nullable ClassAnalyser analyser) throws InvocationTargetException {
+        if (gta.isTeamCityLoggingEnabled()) {
+            TeamCityOutputLogger.logSuiteStarted(testClass.getName());
+        }
         NameFilter testMethodNameFilter = gta.settings().methodNameFilter();
         TestRunner runner = new TestRunner(testClass, testMethodNameFilter, (method, testClassInstance) -> (Boolean) method.invoke(testClassInstance));
         //The TestRunner runs the tests and the accountant ticks them off.
-        return runner.runTestMethods(this, analyser);
+        boolean result = runner.runTestMethods(this, analyser, gta.isTeamCityLoggingEnabled());
+        if (gta.isTeamCityLoggingEnabled()) {
+            TeamCityOutputLogger.logSuiteFinished(testClass.getName());
+        }
+        return result;
     }
 
     @Override

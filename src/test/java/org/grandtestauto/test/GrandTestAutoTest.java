@@ -62,19 +62,30 @@ public class GrandTestAutoTest {
     }
 
     public boolean constructorTest() throws Exception {
+        reset();
+        Properties properties = new Properties();
+        properties.put(TeamCityOutput.TEAMCITY_OUTPUT, "f");
+        File propertiesFile = new File(Helpers.tempDirectory(), "TCO.txt");
+        properties.store(new FileWriter(propertiesFile), "Test");
+        SettingsSpecification settings = new SettingsSpecificationFromFile(propertiesFile.getAbsolutePath());
+
+        GrandTestAuto grandTestAuto = new GrandTestAuto(settings);
+        Assertions.assertThat(grandTestAuto.isTeamCityLoggingEnabled()).isFalse();
+        return true;
+    }
+
+    public boolean isTeamCityLoggingEnabledTest() throws Exception {
+        reset();
         Properties properties = new Properties();
         properties.put(TeamCityOutput.TEAMCITY_OUTPUT, "t");
         File propertiesFile = new File(Helpers.tempDirectory(), "TCO.txt");
         properties.store(new FileWriter(propertiesFile), "Test");
         SettingsSpecification settings = new SettingsSpecificationFromFile(propertiesFile.getAbsolutePath());
 
-        Assertions.assertThat(TeamCityOutputLogger.isEnabled()).isFalse();
-        new GrandTestAuto(settings);
-        Assertions.assertThat(TeamCityOutputLogger.isEnabled()).isTrue();
+        GrandTestAuto grandTestAuto = new GrandTestAuto(settings);
+        Assertions.assertThat(grandTestAuto.isTeamCityLoggingEnabled()).isTrue();
         return true;
     }
-
-    //todo test no TC
 
     public boolean mainTest() {
         //Just returns true: the fact that these tests run at
@@ -205,5 +216,6 @@ public class GrandTestAutoTest {
         utsCalled = new HashSet<>();
         functionTestsCalled = new TreeSet<>();
         loadTestsCalled = new TreeSet<>();
+        Helpers.cleanTempDirectory();
     }
 }

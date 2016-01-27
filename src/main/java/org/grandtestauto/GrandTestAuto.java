@@ -20,7 +20,6 @@ package org.grandtestauto;
 import org.grandtestauto.settings.SettingsSpecification;
 import org.grandtestauto.settings.SettingsSpecificationFromCommandLine;
 import org.grandtestauto.settings.SettingsSpecificationFromFile;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -144,13 +143,7 @@ public class GrandTestAuto {
     }
 
     GrandTestAuto(final SettingsSpecification settings, DoPackageWork dpw) {
-        this(settings, dpw, createLogger(settings));
-    }
-
-    @NotNull
-    private static ResultsLogger createLogger(SettingsSpecification settings) {
-        TeamCityOutputLogger.setEnabled(settings.teamCityOutput());
-        return new ResultsLogger(settings.resultsFileName(), settings.logToConsole());
+        this(settings, dpw, new ResultsLogger(settings.resultsFileName(), settings.logToConsole()));
     }
 
     GrandTestAuto(final SettingsSpecification settingsSpecification, DoPackageWork dpw, ResultsLogger resultsLogger) {
@@ -215,6 +208,10 @@ public class GrandTestAuto {
 
     public ResultsLogger resultsLogger() {
         return resultsLogger;
+    }
+
+    public boolean isTeamCityLoggingEnabled() {
+        return settings.teamCityOutput();
     }
 
     private boolean runAutoLoadTests(final boolean areFunctionTests) {

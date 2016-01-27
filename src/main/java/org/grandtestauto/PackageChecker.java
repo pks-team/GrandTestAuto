@@ -90,7 +90,7 @@ public class PackageChecker extends Coverage implements UnitTesterIF {
     boolean doTestsForClass(Class testClass, @Nullable ClassAnalyser analyser) throws InvocationTargetException {
         TestRunner runner = new TestRunner(testClass, null, (method, testClassInstance) -> true);
         //The TestRunner runs the tests and the accountant ticks them off.
-        return runner.runTestMethods(this, analyser);
+        return runner.runTestMethods(this, analyser, false);
     }
 
     @Override
