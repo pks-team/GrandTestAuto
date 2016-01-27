@@ -1,6 +1,8 @@
 package org.grandtestauto.loganalysis.test;
 
-import org.grandtestauto.*;
+import org.grandtestauto.GTALogger;
+import org.grandtestauto.Messages;
+import org.grandtestauto.PackageResult;
 import org.grandtestauto.assertion.Assert;
 import org.grandtestauto.loganalysis.LogDirectoryAnalyser;
 import org.grandtestauto.test.dataconstants.org.grandtestauto.loganalysis.dir0.Dir0;
@@ -183,6 +185,26 @@ public class LogDirectoryAnalyserTest {
         public void log(String message, @Nullable Throwable t) {
             loggedMessages.add(message);
             loggedExceptions.add(t);
+        }
+
+        @Override public void logSuiteStarted(String suiteName) {
+
+        }
+
+        @Override public void logSuiteFinished(String suiteName) {
+
+        }
+
+        @Override public void logTestStarted(String testName) {
+
+        }
+
+        @Override public void logTestFinished(String testName, long duration) {
+
+        }
+
+        @Override public void closeLogger() {
+
         }
     }
 }

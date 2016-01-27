@@ -1,7 +1,9 @@
-package org.grandtestauto.test.tools;
+package org.grandtestauto.util;
 
-import java.text.*;
-import java.util.*;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * For measuring times. Repeatedly calling <code>start()</code> and <code>stop()</code>

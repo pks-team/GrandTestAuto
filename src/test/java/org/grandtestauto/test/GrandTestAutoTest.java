@@ -2,12 +2,19 @@ package org.grandtestauto.test;
 
 import org.apache.commons.io.FileUtils;
 import org.grandtestauto.GrandTestAuto;
+import org.grandtestauto.TeamCityOutputLogger;
+import org.grandtestauto.assertion.Assert;
 import org.grandtestauto.settings.ResultsFileName;
+import org.grandtestauto.settings.SettingsSpecification;
+import org.grandtestauto.settings.SettingsSpecificationFromFile;
+import org.grandtestauto.settings.TeamCityOutput;
 import org.grandtestauto.test.dataconstants.org.grandtestauto.Grandtestauto;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -21,17 +28,17 @@ public class GrandTestAutoTest {
     /**
      * The names of the Unit Testers called within various sub-tests.
      */
-    private static Set<String> utsCalled = new HashSet<String>();
+    private static Set<String> utsCalled = new HashSet<>();
 
     /**
      * The names of the Function Tests called within various sub-tests.
      */
-    private static TreeSet<String> functionTestsCalled = new TreeSet<String>();
+    private static TreeSet<String> functionTestsCalled = new TreeSet<>();
 
     /**
      * The names of the Load Tests called within various sub-tests.
      */
-    private static TreeSet<String> loadTestsCalled = new TreeSet<String>();
+    private static TreeSet<String> loadTestsCalled = new TreeSet<>();
 
     /**
      * Called from a test program run within a sub-test.
@@ -54,11 +61,19 @@ public class GrandTestAutoTest {
         loadTestsCalled.add( ftName.getName() );
     }
 
-    public boolean constructorTest() {
-        //runAllTestsTest exercises the constructor
-        //sufficiently, so just return true.
+    public boolean constructorTest() throws Exception {
+        Properties properties = new Properties();
+        properties.put(TeamCityOutput.TEAMCITY_OUTPUT, "t");
+        File propertiesFile = new File(Helpers.tempDirectory(), "TCO.txt");
+        properties.store(new FileWriter(propertiesFile), "Test");
+        SettingsSpecification settings = new SettingsSpecificationFromFile(propertiesFile.getAbsolutePath());
+
+        GrandTestAuto grandTestAuto = new GrandTestAuto(settings);
+        Assert.azzert(grandTestAuto.resultsLogger() instanceof TeamCityOutputLogger);
         return true;
     }
+
+    //todo test no TC
 
     public boolean mainTest() {
         //Just returns true: the fact that these tests run at
@@ -153,7 +168,7 @@ public class GrandTestAutoTest {
         reset();
         GrandTestAuto gta = Helpers.setupForZip( Grandtestauto.test35_zip );
         boolean gtaResult = gta.runAllTests();
-        TreeSet<String> expectedFTNames = new TreeSet<String>();
+        TreeSet<String> expectedFTNames = new TreeSet<>();
         expectedFTNames.add( "a35.b.functiontest.BugsBunny" );
         expectedFTNames.add( "a35.b.functiontest.DaffyDuck" );
         expectedFTNames.add( "a35.b.functiontest.ElmerFudd" );
@@ -171,7 +186,7 @@ public class GrandTestAutoTest {
         reset();
         GrandTestAuto gta = Helpers.setupForZip( Grandtestauto.test37_zip );
         boolean gtaResult = gta.runAllTests();
-        TreeSet<String> expectedLTNames = new TreeSet<String>();
+        TreeSet<String> expectedLTNames = new TreeSet<>();
         expectedLTNames.add( "a37.b.loadtest.BugsBunny" );
         expectedLTNames.add( "a37.b.loadtest.DaffyDuck" );
         expectedLTNames.add( "a37.b.loadtest.ElmerFudd" );
@@ -186,8 +201,8 @@ public class GrandTestAutoTest {
     }
 
     private void reset() {
-        utsCalled = new HashSet<String>();
-        functionTestsCalled = new TreeSet<String>();
-        loadTestsCalled = new TreeSet<String>();
+        utsCalled = new HashSet<>();
+        functionTestsCalled = new TreeSet<>();
+        loadTestsCalled = new TreeSet<>();
     }
 }

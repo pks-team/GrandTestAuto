@@ -2,7 +2,9 @@ package org.grandtestauto;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.text.NumberFormat;
 import java.util.logging.*;
 
@@ -54,6 +56,22 @@ public class ResultsLogger implements GTALogger {
         for (Handler handler : handlers) {
             handler.flush();
         }
+    }
+
+    @Override public void logSuiteStarted(String suiteName) {
+        //todo FLL & TL
+    }
+
+    @Override public void logSuiteFinished(String suiteName) {
+        //todo FLL & TL
+    }
+
+    @Override public void logTestStarted(String testName) {
+        //todo FLL & TL
+    }
+
+    @Override public void logTestFinished(String testName, long duration) {
+        //todo FLL & TL
     }
 
     /**

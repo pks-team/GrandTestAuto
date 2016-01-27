@@ -33,5 +33,5 @@ public interface UnitTesterIF {
 	 *
 	 * @return <code>true</code> if and only if all the tests passed.
 	 */
-	public boolean runTests();
+	boolean runTests();
 }

@@ -1,14 +1,13 @@
 /****************************************************************************
  * Copyright 2012 Timothy Gordon Lavers (Australia)
- *
- *                          The Wide Open License (WOL)
- *
+ * <p>
+ * The Wide Open License (WOL)
+ * <p>
  * Permission to use, copy, modify, distribute and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
  * the above copyright notice and this license appear in all source copies.
  * THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT EXPRESS OR IMPLIED WARRANTY OF
  * ANY KIND. See http://www.dspguru.com/wol.htm for more information.
- *
  *****************************************************************************/
 package org.grandtestauto;
 
@@ -21,32 +20,34 @@ import java.util.List;
  */
 class RunsTestsInPackages extends DPWImpl {
 
-    Boolean invokeRun( String packageName, UnitTesterIF ut ) {
+    Boolean invokeRun(String packageName, UnitTesterIF ut) {
         Boolean runResult;
         try {
+            gta.resultsLogger().logSuiteStarted(packageName);// todo check with Tim
             runResult = ut.runTests();
         } catch (Throwable e) {
             e.printStackTrace();
-            String msg = Messages.message( Messages.OPK_ERROR_RUNNING_UNIT_TESTER_TEST, packageName );
-            gta.resultsLogger().log( msg, null );
+            String msg = Messages.message(Messages.OPK_ERROR_RUNNING_UNIT_TESTER_TEST, packageName);
+            gta.resultsLogger().log(msg, null);
             runResult = false;
         }
+        gta.resultsLogger().logSuiteFinished(packageName);// todo check with Tim
         return runResult;
     }
 
-    public PackageResult runAutoLoadTestPackage( boolean areFunctionTests, Collection<String> classesInPackage, String testPackageName ) {
+    public PackageResult runAutoLoadTestPackage(boolean areFunctionTests, Collection<String> classesInPackage, String testPackageName) {
         String key;
         key = areFunctionTests ? Messages.OPK_RUNNING_FUNCTION_TEST_PACKAGE : Messages.OPK_RUNNING_LOAD_TEST_PACKAGE;
-        gta.resultsLogger().log( Messages.message( key, testPackageName ), null );
+        gta.resultsLogger().log(Messages.message(key, testPackageName), null);
         boolean packageResult = true;
         PackageResultImpl result = new PackageResultImpl();
         //Log that the tests are to be run.
         for (String testName : classesInPackage) {
             //Shortcut the tests for this package if a test has failed.
-            if (!gta.continueWithTests( packageResult )) break;
+            if (!gta.continueWithTests(packageResult)) break;
 
             //Ignore any tests that are filtered out by package name.
-            if (gta.classIsToBeSkippedBecauseOfSettings( testName )) continue;
+            if (gta.classIsToBeSkippedBecauseOfSettings(testName)) continue;
             //Get the class. It is a AutoLoadTest.
             String fullClassName = testPackageName + "." + testName;
             try {
@@ -54,17 +55,17 @@ class RunsTestsInPackages extends DPWImpl {
                 AutoLoadTestRun altr = new AutoLoadTestRun(fullClassName, testName, gta.resultsLogger());
                 packageResult &= altr.runAutoLoadTest();
             } catch (InstantiationException e) {
-                String msg = Messages.message( Messages.OPK_AUTO_LOAD_TEST_DOES_NOT_HAVE_REQURIED_CONSTRUCTOR, testName );
-                gta.resultsLogger().log( msg, null );
+                String msg = Messages.message(Messages.OPK_AUTO_LOAD_TEST_DOES_NOT_HAVE_REQURIED_CONSTRUCTOR, testName);
+                gta.resultsLogger().log(msg, null);
                 packageResult = false;
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
                 //
-                System.out.println( "XXXXX unexpected error, could not find: " + fullClassName );
+                System.out.println("XXXXX unexpected error, could not find: " + fullClassName);
             }
         }
-        result.setResult( packageResult );
+        result.setResult(packageResult);
         return result;
     }
 

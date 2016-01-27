@@ -34,9 +34,9 @@ class AutoLoadTestRun {
     private String testName;
 
     @Nullable
-    private ResultsLogger resultsLogger;
+    private GTALogger resultsLogger;
 
-    AutoLoadTestRun(@NotNull String fullClassName, @NotNull String testName, @Nullable ResultsLogger resultsLogger) {
+    AutoLoadTestRun(@NotNull String fullClassName, @NotNull String testName, @Nullable GTALogger resultsLogger) {
         this.fullClassName = fullClassName;
         this.testName = testName;
         this.resultsLogger = resultsLogger;

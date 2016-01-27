@@ -55,7 +55,7 @@ public class CoverageUnitTester extends Coverage implements UnitTesterIF {
      */
     private
     @NotNull
-    ResultsLogger resultsLogger;
+    GTALogger resultsLogger;
 
     /**
      * Creates a <code>CoverageUnitTester</code> that will run unit tests
@@ -68,8 +68,7 @@ public class CoverageUnitTester extends Coverage implements UnitTesterIF {
         resultsLogger = gta.resultsLogger();
     }
 
-    @NotNull
-    ResultsLogger resultsLogger() {
+    @NotNull GTALogger resultsLogger() {
         return resultsLogger;
     }
 

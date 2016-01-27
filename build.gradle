@@ -29,6 +29,7 @@ repositories {
 dependencies {
     compile 'org.apache.ant:ant:1.9.6'
     compile 'commons-io:commons-io:2.4'
+    testCompile 'org.assertj:assertj-core:3.3.0'
 }
 
 configurations {

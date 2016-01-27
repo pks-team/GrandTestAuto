@@ -9,5 +9,15 @@ import org.jetbrains.annotations.Nullable;
  */
 public interface GTALogger {
 
-    public void log(String message, @Nullable Throwable t);
+    void log(String message, @Nullable Throwable t);
+
+    void logSuiteStarted(String suiteName);
+
+    void logSuiteFinished(String suiteName);
+
+    void logTestStarted(String testName);
+
+    void logTestFinished(String testName, long duration);
+
+    void closeLogger();
 }

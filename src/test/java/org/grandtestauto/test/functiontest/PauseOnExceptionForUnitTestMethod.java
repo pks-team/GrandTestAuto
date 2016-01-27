@@ -6,7 +6,7 @@ import org.grandtestauto.assertion.Assert;
 import org.grandtestauto.settings.SettingsSpecificationFromFile;
 import org.grandtestauto.test.Helpers;
 import org.grandtestauto.test.dataconstants.org.grandtestauto.Grandtestauto;
-import org.grandtestauto.test.tools.Stopwatch;
+import org.grandtestauto.util.Stopwatch;
 
 import java.io.File;
 

@@ -41,7 +41,7 @@ class StaticUtils {
         return secondsToPauseIfTestThrowsException;
     }
 
-    static void pauseOnException(Integer seconds, ResultsLogger logger) {
+    static void pauseOnException(Integer seconds, GTALogger logger) {
         if (seconds != null) {
             String pauseMessage = Messages.message(Messages.OPK_PAUSING_TEST_THAT_THREW_ERROR, seconds.toString());
             printAndLog(null, pauseMessage, logger);
@@ -53,7 +53,7 @@ class StaticUtils {
         }
     }
 
-    static void printAndLog(Throwable e, String msg, ResultsLogger resultsLogger) {
+    static void printAndLog(Throwable e, String msg, GTALogger resultsLogger) {
         if (resultsLogger != null) {
             resultsLogger.log(msg, e);
         } else {

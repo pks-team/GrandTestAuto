@@ -9,6 +9,7 @@
  *****************************************************************************/
 package org.grandtestauto;
 
+import org.grandtestauto.util.Stopwatch;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -93,7 +94,12 @@ class TestRunner {
                     cut.resultsLogger().log(Messages.message(Messages.TPK_RUNNING_TEST_AGAIN, testMethod.getName(), "" + i), null);
                 }
                 try {
+                    cut.resultsLogger().logTestStarted(testMethod.getName());
+                    Stopwatch stopWatch = new Stopwatch();
+                    stopWatch.start();
                     resultForMethod = invoker.invoke(testMethod, testObj);
+                    stopWatch.stop();
+                    cut.resultsLogger().logTestFinished(testMethod.getName(), stopWatch.times().get(0));
                     //Record the method as tested.
                     if (analyser != null) {
                         analyser.recordTestDone(testMethod.getName(), cut.accountant());

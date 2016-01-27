@@ -22,6 +22,7 @@ package org.grandtestauto;
 import org.grandtestauto.settings.SettingsSpecification;
 import org.grandtestauto.settings.SettingsSpecificationFromCommandLine;
 import org.grandtestauto.settings.SettingsSpecificationFromFile;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -46,7 +47,7 @@ public class GrandTestAuto {
      */
     private SettingsSpecification settings;
 
-    private ResultsLogger resultsLogger;
+    private GTALogger resultsLogger;
 
     /**
      * Information about the packages in the project.
@@ -145,10 +146,17 @@ public class GrandTestAuto {
     }
 
     GrandTestAuto(final SettingsSpecification settings, DoPackageWork dpw) {
-        this(settings, dpw, new ResultsLogger(settings.resultsFileName(), settings.logToConsole()));
+        this(settings, dpw, createLogger(settings));
     }
-    
-    GrandTestAuto(final SettingsSpecification settingsSpecification, DoPackageWork dpw, ResultsLogger resultsLogger) {
+
+    @NotNull private static GTALogger createLogger(SettingsSpecification settings) {
+        if (settings.teamCityOutput()) {
+            return new TeamCityOutputLogger();
+        }
+        return new ResultsLogger(settings.resultsFileName(), settings.logToConsole());
+    }
+
+    GrandTestAuto(final SettingsSpecification settingsSpecification, DoPackageWork dpw, GTALogger resultsLogger) {
         settings = settingsSpecification;
         this.resultsLogger = resultsLogger;
         productionPackagesInfo = new PackagesInfo<PackageInfo>(packageName -> settings.packageNameFilter().accept(packageName) && PackagesInfo.namesPackageThatMightNeedUnitTests(packageName), settings.productionClassesDir()) {
@@ -208,7 +216,7 @@ public class GrandTestAuto {
         return result;
     }
 
-    public ResultsLogger resultsLogger() {
+    public GTALogger resultsLogger() {
         return resultsLogger;
     }
 
