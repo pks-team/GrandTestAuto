@@ -1,4 +1,4 @@
-package org.grandtestauto.test.tools;
+package org.grandtestauto.util;
 
 /**
  * This class provides a means of suspending our test thread
@@ -14,8 +14,8 @@ public final class Waiting {
      */
     private Waiting() {}
 
-    public static interface ItHappened {
-        public boolean itHappened();
+    public interface ItHappened {
+        boolean itHappened();
     }
 
     /**
