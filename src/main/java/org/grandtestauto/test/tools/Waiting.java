@@ -1,4 +1,4 @@
-package org.grandtestauto.util;
+package org.grandtestauto.test.tools;
 
 /**
  * This class provides a means of suspending our test thread

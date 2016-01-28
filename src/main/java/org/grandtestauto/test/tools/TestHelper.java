@@ -1,5 +1,7 @@
-package org.grandtestauto.util;
+package org.grandtestauto.test.tools;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -36,5 +38,11 @@ public class TestHelper {
 
     public static boolean waitForNamedThreadToFinish(final String threadName, long timeoutMillis) {
         return Waiting.waitFor(() -> !namesOfActiveThreads().contains(threadName), timeoutMillis);
+    }
+
+    public static String toString(Throwable throwable) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        throwable.printStackTrace(new PrintStream(stream));
+        return new String(stream.toByteArray());
     }
 }

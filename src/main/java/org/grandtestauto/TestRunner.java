@@ -9,12 +9,11 @@
  *****************************************************************************/
 package org.grandtestauto;
 
-import org.grandtestauto.util.Stopwatch;
+import org.grandtestauto.test.tools.Stopwatch;
+import org.grandtestauto.test.tools.TestHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -117,9 +116,7 @@ class TestRunner {
 //                    result = false;
                     reportTestResult(cut, testMethod, false, i, maxRetries, ita.getCause());
                     if (i == maxRetries && teamCityLoggingEnabled) {
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        ita.getCause().printStackTrace(new PrintStream(stream));
-                        TeamCityOutputLogger.logTestFailed(testMethod.getName(), ita.getCause().getMessage(), new String(stream.toByteArray()));
+                        TeamCityOutputLogger.logTestFailed(testMethod.getName(), ita.getCause().getMessage(), TestHelper.toString(ita));
                     }
                     //If the class or the test method is annotated with PauseOnException, pause.
                     StaticUtils.pauseOnException(pauseOnExceptionForClass, cut.resultsLogger());

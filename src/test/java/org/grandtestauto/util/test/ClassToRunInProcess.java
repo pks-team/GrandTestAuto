@@ -2,7 +2,7 @@ package org.grandtestauto.util.test;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
-import org.grandtestauto.util.Waiting;
+import org.grandtestauto.test.tools.Waiting;
 
 import java.io.File;
 import java.io.IOException;

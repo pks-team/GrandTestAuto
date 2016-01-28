@@ -1,4 +1,4 @@
-package org.grandtestauto.util.test;
+package org.grandtestauto.test.tools.test;
 
 /**
  * @author Tim Lavers & FedericoL

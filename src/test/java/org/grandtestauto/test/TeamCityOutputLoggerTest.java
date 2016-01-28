@@ -69,6 +69,21 @@ public class TeamCityOutputLoggerTest {
         return true;
     }
 
+    public boolean logTestFailedInlinesStackTraceTest() throws IOException {
+        init();
+        TeamCityOutputLogger logger = new TeamCityOutputLogger();
+
+        String message = "AssertionFailedError: expected:<20000> but was:<10000>\n\r Assert.fail(Assert.java:47) \n\r Check your code!";
+        String expected = "AssertionFailedError: expected:<20000> but was:<10000>|n|r Assert.fail(Assert.java:47) |n|r Check your code!";
+
+        logger.logTestFailed("constructorTest", "Assertion error", message);
+
+        String actual = testOutputStream.toString();
+        assertThat(actual.trim()).isEqualTo("##teamcity[testFailed name='constructorTest' message='Assertion error' details='" + expected + "']");
+        cleanup();
+        return true;
+    }
+
     private void init() {
         originalPrintStream = System.out;
         testOutputStream = new ByteArrayOutputStream();

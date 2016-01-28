@@ -38,6 +38,7 @@ class RunsTestsInPackages extends DPWImpl {
     public PackageResult runAutoLoadTestPackage(boolean areFunctionTests, Collection<String> classesInPackage, String testPackageName) {
         String key;
         key = areFunctionTests ? Messages.OPK_RUNNING_FUNCTION_TEST_PACKAGE : Messages.OPK_RUNNING_LOAD_TEST_PACKAGE;
+        if (gta.isTeamCityLoggingEnabled()) TeamCityOutputLogger.logSuiteStarted(testPackageName);
         gta.resultsLogger().log(Messages.message(key, testPackageName), null);
         boolean packageResult = true;
         PackageResultImpl result = new PackageResultImpl();
@@ -52,7 +53,7 @@ class RunsTestsInPackages extends DPWImpl {
             String fullClassName = testPackageName + "." + testName;
             try {
                 //Run the test and add the result to the overall package result.
-                AutoLoadTestRun altr = new AutoLoadTestRun(fullClassName, testName, gta.resultsLogger());
+                AutoLoadTestRun altr = new AutoLoadTestRun(fullClassName, testName, gta.resultsLogger(), gta.isTeamCityLoggingEnabled());
                 packageResult &= altr.runAutoLoadTest();
             } catch (InstantiationException e) {
                 String msg = Messages.message(Messages.OPK_AUTO_LOAD_TEST_DOES_NOT_HAVE_REQURIED_CONSTRUCTOR, testName);
@@ -66,6 +67,7 @@ class RunsTestsInPackages extends DPWImpl {
             }
         }
         result.setResult(packageResult);
+        if (gta.isTeamCityLoggingEnabled()) TeamCityOutputLogger.logSuiteFinished(testPackageName);
         return result;
     }
 

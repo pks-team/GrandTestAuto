@@ -29,6 +29,6 @@ public class TeamCityOutputLogger {
 
     public static void logTestFailed(String testName, String msg, String details) {
         String message = MessageFormat.format("##teamcity[testFailed name=''{0}'' message=''{1}'' details=''{2}'']", testName, msg, details);
-        System.out.println(message);
+        System.out.println(message.replaceAll("\n", "|n").replaceAll("\r", "|r"));
     }
 }

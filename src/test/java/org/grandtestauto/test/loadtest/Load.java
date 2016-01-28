@@ -6,7 +6,7 @@ import org.grandtestauto.settings.SettingsSpecificationFromFile;
 import org.grandtestauto.test.Helpers;
 import org.grandtestauto.test.dataconstants.org.grandtestauto.Grandtestauto;
 import org.grandtestauto.test.functiontest.FTBase;
-import org.grandtestauto.util.Stopwatch;
+import org.grandtestauto.test.tools.Stopwatch;
 
 import java.io.File;
 import java.io.IOException;

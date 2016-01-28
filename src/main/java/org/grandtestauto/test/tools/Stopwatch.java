@@ -1,4 +1,4 @@
-package org.grandtestauto.util;
+package org.grandtestauto.test.tools;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;

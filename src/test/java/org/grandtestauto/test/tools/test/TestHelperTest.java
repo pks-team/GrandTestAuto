@@ -1,8 +1,7 @@
-package org.grandtestauto.util.test;
+package org.grandtestauto.test.tools.test;
 
-import org.assertj.core.api.Assertions;
 import org.grandtestauto.test.Helpers;
-import org.grandtestauto.util.TestHelper;
+import org.grandtestauto.test.tools.TestHelper;
 
 import java.util.Set;
 
@@ -55,12 +54,17 @@ public class TestHelperTest {
         TestHelper.printActiveThreads();
 
         String got = Helpers.stopRecordingSout();
-        Assertions.assertThat(got).contains(thread.getName(), thread2.getName());
+        assertThat(got).contains(thread.getName(), thread2.getName());
 
         thread.join();
         thread2.join();
         return true;
     }
 
+    public boolean toStringTest() throws Exception {
+        String stackTrace = TestHelper.toString(new Throwable("Oups!"));
+        assertThat(stackTrace).startsWith("java.lang.Throwable: Oups!");
+        return true;
+    }
 }
 

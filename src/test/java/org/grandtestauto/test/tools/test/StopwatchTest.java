@@ -1,7 +1,7 @@
-package org.grandtestauto.util.test;
+package org.grandtestauto.test.tools.test;
 
-import org.grandtestauto.util.Stopwatch;
-import org.grandtestauto.util.Waiting;
+import org.grandtestauto.test.tools.Stopwatch;
+import org.grandtestauto.test.tools.Waiting;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.withinPercentage;
