@@ -28,7 +28,20 @@ public class TeamCityOutputLogger {
     }
 
     public static void logTestFailed(String testName, String msg, String details) {
-        String message = MessageFormat.format("##teamcity[testFailed name=''{0}'' message=''{1}'' details=''{2}'']", testName, msg, details);
-        System.out.println(message.replaceAll("\n", "|n").replaceAll("\r", "|r"));
+        String message = MessageFormat.format("##teamcity[testFailed name=''{0}'' message=''{1}'' details=''{2}'']", testName, escape(msg), escape(details));
+        System.out.println(message);
+    }
+
+    /**
+     * For escaped values, TeamCity uses a vertical bar "|" as an escape character.
+     * In order to have certain characters properly interpreted by the TeamCity server, they must be preceded by a vertical bar.
+     */
+    private static String escape(String text) {
+        return text.replaceAll("\\|", "||")
+                .replaceAll("'", "|'")
+                .replaceAll("\\[", "|[")
+                .replaceAll("\\]", "|]")
+                .replaceAll("\n", "|n")
+                .replaceAll("\r", "|r");
     }
 }
