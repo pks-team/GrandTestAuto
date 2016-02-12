@@ -142,7 +142,7 @@ class TestRunner {
                 //Record that there is a test for the method (even if it failed).
                 cut.accountant().testFound(testMethod);
                 if (teamCityLoggingEnabled)
-                    TeamCityOutputLogger.logTestFinished(testMethod.getName(), stopWatch.times().get(0));
+                    TeamCityOutputLogger.logTestFinished(testMethod.getName(), 0L);
             }
             result &= resultForMethod;
         }

@@ -22,7 +22,9 @@ public class Stopwatch {
     public void stop() {
         //Want to get the time before doing the assert.
         long now = System.currentTimeMillis();
-        assert lastStartTime != null : "Has not been started or re-started since last stop!";
+        if (lastStartTime == null) {
+            lastStartTime = now;
+        }
         times.add( now - lastStartTime );
         lastStartTime = null;
     }

@@ -22,6 +22,25 @@ public class StopwatchTest {
     }
 
     public boolean stopTest() throws Exception {
+        //Check that it is ok to stop an already stopped stopwatch.
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.start();
+        Waiting.pause(10);
+        stopwatch.stop();
+        stopwatch.stop();
+        stopwatch.stop();
+        stopwatch.stop();
+        assertThat(stopwatch.times()).hasSize(1);
+        return true;
+    }
+
+    public boolean stopWithoutStartTest() throws Exception {
+        //Check that it is ok to stop a stopwatch even if it has not been started.
+        Stopwatch stopwatch = new Stopwatch();
+        Waiting.pause(10);
+        stopwatch.stop();
+        assertThat(stopwatch.times()).hasSize(1);
+        assertThat(stopwatch.times().get(0)).isEqualTo(0);
         return true;
     }
 
