@@ -1,5 +1,7 @@
 package org.grandtestauto;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.text.MessageFormat;
 
 /**
@@ -27,7 +29,7 @@ public class TeamCityOutputLogger {
         System.out.println(message);
     }
 
-    public static void logTestFailed(String testName, String msg, String details) {
+    public static void logTestFailed(@Nullable String testName, @Nullable String msg, @Nullable String details) {
         String message = MessageFormat.format("##teamcity[testFailed name=''{0}'' message=''{1}'' details=''{2}'']", testName, escape(msg), escape(details));
         System.out.println(message);
     }
@@ -36,7 +38,8 @@ public class TeamCityOutputLogger {
      * For escaped values, TeamCity uses a vertical bar "|" as an escape character.
      * In order to have certain characters properly interpreted by the TeamCity server, they must be preceded by a vertical bar.
      */
-    private static String escape(String text) {
+    private static String escape(@Nullable String text) {
+        if (text == null) return "";
         return text.replaceAll("\\|", "||")
                 .replaceAll("'", "|'")
                 .replaceAll("\\[", "|[")

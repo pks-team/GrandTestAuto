@@ -2,3 +2,7 @@ CLASSES_ROOT=build/classes/test
 PROD_ROOT=build/classes/main
 LOG_FILE_NAME=AllTestResults.txt
 TEAMCITY_OUTPUT=true
+
+SINGLE_PACKAGE=
+SINGLE_CLASS=
+SINGLE_METHOD=

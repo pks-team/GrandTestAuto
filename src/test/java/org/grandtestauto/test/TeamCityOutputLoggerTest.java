@@ -17,6 +17,17 @@ public class TeamCityOutputLoggerTest {
     private PrintStream originalPrintStream;
     private ByteArrayOutputStream testOutputStream;
 
+    public boolean nullTest() {
+        init();
+
+        TeamCityOutputLogger.logTestFailed("test", null, null);
+        String actual = testOutputStream.toString();
+        assertThat(actual.trim()).isEqualTo("##teamcity[testFailed name='test' message='' details='']");
+
+        cleanup();
+        return true;
+    }
+
     public boolean logSuiteStartedTest() throws IOException {
         init();
         TeamCityOutputLogger.logSuiteStarted("MySuite");
