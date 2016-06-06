@@ -14,9 +14,11 @@ import org.grandtestauto.test.tools.TestHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -76,8 +78,9 @@ class TestRunner {
         }
         //Empty params array for invoking test methods.
         for (Method testMethod : methodsToRun) {
-            //Check that the method returns a boolean.
-            if (!testMethod.getReturnType().equals(boolean.class)) {
+            //Check that the method returns a boolean or is annotated as a test.
+            boolean isAnnotatedAsTest = isAnnotatedAsTest(testMethod);
+            if (!testMethod.getReturnType().equals(boolean.class) && !isAnnotatedAsTest) {
                 String msg = Messages.message(Messages.OPK_TEST_METHOD_DOES_NOT_RETURN_BOOLEAN, testMethod.getName());
                 cut.resultsLogger().log(msg, null);
                 result = false;
@@ -102,7 +105,12 @@ class TestRunner {
                     stopWatch.stop();
                     //Record the method as tested.
                     if (analyser != null) {
-                        analyser.recordTestDone(testMethod.getName(), cut.accountant());
+                        String testMethodName = testMethod.getName();
+                        String testMethodNameToRecord = testMethodName;
+                        if (isAnnotatedAsTest && !testMethodName.endsWith("Test")) {
+                            testMethodNameToRecord = testMethodName + "Test";
+                        }
+                        analyser.recordTestDone(testMethodNameToRecord, cut.accountant());
                     }
                     reportTestResult(cut, testMethod, resultForMethod, i, maxRetries, null);
                 } catch (IllegalAccessException iae) {
@@ -113,7 +121,6 @@ class TestRunner {
                     //The test threw an exception. Print out the underlying exception (it might contain valuable information)
                     //and count this as the test failing.
                     ita.getCause().printStackTrace();
-//                    result = false;
                     reportTestResult(cut, testMethod, false, i, maxRetries, ita.getCause());
                     if (i == maxRetries && teamCityLoggingEnabled) {
                         TeamCityOutputLogger.logTestFailed(testMethod.getName(), ita.getCause().getMessage(), TestHelper.toString(ita));
@@ -141,8 +148,9 @@ class TestRunner {
                 }
                 //Record that there is a test for the method (even if it failed).
                 cut.accountant().testFound(testMethod);
-                if (teamCityLoggingEnabled)
+                if (teamCityLoggingEnabled) {
                     TeamCityOutputLogger.logTestFinished(testMethod.getName(), 0L);
+                }
             }
             result &= resultForMethod;
         }
@@ -163,12 +171,24 @@ class TestRunner {
     }
 
     private boolean isTestMethod(Method m) {
+        if (isAnnotatedAsTest(m)) return true;
         boolean isTesty = m.getName().endsWith("Test");
         isTesty &= Modifier.isPublic(m.getModifiers());
         isTesty &= !Modifier.isAbstract(m.getModifiers());
         isTesty &= m.getReturnType().equals(boolean.class);
         isTesty &= m.getParameterTypes().length == 0;
         return isTesty;
+    }
+
+    private boolean isAnnotatedAsTest(Method m) {
+        for (Annotation a : m.getDeclaredAnnotations()) {
+            Class<? extends Annotation> annotationType = a.annotationType();
+            String annotationName = annotationType.getSimpleName();
+            if (annotationName.equals("Test")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public interface MethodInvoker {

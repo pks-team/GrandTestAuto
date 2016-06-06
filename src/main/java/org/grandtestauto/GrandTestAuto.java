@@ -36,7 +36,7 @@ import java.util.List;
  */
 public class GrandTestAuto {
 
-    private static final String VERSION = "GrandTestAuto 5.9";
+    private static final String VERSION = "GrandTestAuto 5.10";
     public static final String DO_NOT_TERMINATE = "org.grandtestauto.DoNotTerminateAfterTests";
 
     /**

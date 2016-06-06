@@ -1,12 +1,11 @@
 /****************************************************************************
- *                          The Wide Open License (WOL)
- *
+ * The Wide Open License (WOL)
+ * <p>
  * Permission to use, copy, modify, distribute and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
  * the above copyright notice and this license appear in all source copies.
  * THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT EXPRESS OR IMPLIED WARRANTY OF
  * ANY KIND. See http://www.dspguru.com/wol.htm for more information.
- *
  *****************************************************************************/
 package org.grandtestauto;
 
@@ -14,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * A <code>CoverageUnitTester</code> runs the unit tests
@@ -67,7 +67,8 @@ public class CoverageUnitTester extends Coverage implements UnitTesterIF {
         resultsLogger = gta.resultsLogger();
     }
 
-    @NotNull ResultsLogger resultsLogger() {
+    @NotNull
+    ResultsLogger resultsLogger() {
         return resultsLogger;
     }
 
@@ -97,7 +98,18 @@ public class CoverageUnitTester extends Coverage implements UnitTesterIF {
             TeamCityOutputLogger.logSuiteStarted(testClass.getName());
         }
         NameFilter testMethodNameFilter = gta.settings().methodNameFilter();
-        TestRunner runner = new TestRunner(testClass, testMethodNameFilter, (method, testClassInstance) -> (Boolean) method.invoke(testClassInstance));
+        TestRunner runner = new TestRunner(testClass, testMethodNameFilter, new TestRunner.MethodInvoker() {
+            @Override
+            public boolean invoke(Method method, Object testClassInstance) throws InvocationTargetException, IllegalAccessException {
+                if (method.getReturnType().equals(boolean.class)) {
+                    return (Boolean) method.invoke(testClassInstance);
+                } else {
+                    //If an exception is thrown, it will be propagated, if not, the test passed.
+                    method.invoke(testClassInstance);
+                    return true;
+                }
+            }
+        });
         //The TestRunner runs the tests and the accountant ticks them off.
         boolean result = runner.runTestMethods(this, analyser, gta.isTeamCityLoggingEnabled());
         if (gta.isTeamCityLoggingEnabled()) {
