@@ -13,11 +13,8 @@ import java.io.File;
 public class RunUnitTestMethodsAnnotatedAsTest extends FTBase {
 
     public boolean runTest() {
-        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~RunUnitTestMethodsAnnotatedAsTest.runTest");
         boolean passed = Helpers.setupForZip(new File(Grandtestauto.test140_zip), true, true, true).runAllTests();
         String logFileContents = Helpers.logFileContents();
-        System.out.println("logFileContents = " + logFileContents);
-        Waiting.pause(100);
         Assert.azzert(logFileContents.contains("ATest"));
         Assert.azzert(logFileContents.contains("aTest"));
         Assert.azzert(logFileContents.contains("b"));
