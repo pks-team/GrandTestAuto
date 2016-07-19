@@ -3,6 +3,6 @@ PROD_ROOT=build/classes/main
 LOG_FILE_NAME=AllTestResults.txt
 TEAMCITY_OUTPUT=f
 
-SINGLE_PACKAGE=o.g.t.f
-SINGLE_CLASS=SpecifyAnnotatedUnitTestUsingSettings
+#SINGLE_PACKAGE=o.g.t.f
+#SINGLE_CLASS=SpecifyAnnotatedUnitTestUsingSettings
 SINGLE_METHOD=
