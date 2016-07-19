@@ -63,7 +63,6 @@ public class CoverageUnitTester extends Coverage implements UnitTesterIF {
      */
     public CoverageUnitTester(@NotNull GrandTestAuto gta) {
         super(gta.testPackagesInfo().classesRoot());
-        System.out.println("CoverageUnitTester.CoverageUnitTester0000000000000000000000000000000000000000000");
         this.gta = gta;
         resultsLogger = gta.resultsLogger();
     }
@@ -99,7 +98,6 @@ public class CoverageUnitTester extends Coverage implements UnitTesterIF {
             TeamCityOutputLogger.logSuiteStarted(testClass.getName());
         }
         NameFilter testMethodNameFilter = gta.settings().methodNameFilter();
-        System.out.println("!!!!!!!!!!!!!!!!!!testMethodNameFilter = " + testMethodNameFilter);
         TestRunner runner = new TestRunner(testClass, testMethodNameFilter, new TestRunner.MethodInvoker() {
             @Override
             public boolean invoke(Method method, Object testClassInstance) throws InvocationTargetException, IllegalAccessException {

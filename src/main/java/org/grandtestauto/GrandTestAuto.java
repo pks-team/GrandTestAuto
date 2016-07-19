@@ -271,7 +271,6 @@ public class GrandTestAuto {
         }
         List<String> packageNames = productionPackagesInfo().testablePackageNames();
         boolean result = true;
-        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&packageNames = " + packageNames);
         for (String packageName : packageNames) {
             //Shortcut these tests if a test has failed.
             if (!continueWithTests(result)) {

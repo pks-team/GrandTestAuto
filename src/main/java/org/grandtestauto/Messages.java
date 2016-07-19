@@ -85,6 +85,8 @@ public class Messages {
     public static final String OPK_NO_RESULTS_FOUND_FOR = "OPK_NO_RESULTS_FOUND_FOR";
     public static final String OPK_UNIT_TESTS_FAILED_FOR = "OPK_UNIT_TESTS_FAILED_FOR";
     public static final String OPK_ONE_OR_MORE_TESTS_FAILED_IN = "OPK_ONE_OR_MORE_TESTS_FAILED_IN";
+    public static final String OPK_NUMBER_OF_AUTOLOAD_TESTS = "OPK_NUMBER_OF_AUTOLOAD_TESTS";
+    public static final String OPK_NUMBER_OF_UNIT_TEST_PACKAGES = "OPK_NUMBER_OF_UNIT_TEST_PACKAGES";
 
     public static final String OPK_RUNNING_FUNCTION_TEST_PACKAGE = "OPK_RUNNING_FUNCTION_TEST_PACKAGE";
     public static final String OPK_RUNNING_LOAD_TEST_PACKAGE = "OPK_RUNNING_LOAD_TEST_PACKAGE";

@@ -52,7 +52,8 @@ public class LogDirectoryAnalyser implements DoPackageWork {
             }
         }
         executor.shutdown();
-
+        resultsLogger.log(Messages.message(Messages.OPK_NUMBER_OF_UNIT_TEST_PACKAGES, Integer.toString(unitTestPackageDone.size())), null);
+        resultsLogger.log(Messages.message(Messages.OPK_NUMBER_OF_AUTOLOAD_TESTS, Integer.toString(functionTestsDone.size())), null);
     }
 
     public Map<String, Boolean> unitTestPackageResults() {

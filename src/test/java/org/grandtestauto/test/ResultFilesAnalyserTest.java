@@ -40,7 +40,7 @@ public class ResultFilesAnalyserTest {
         Helpers.startRecordingSout();
         ResultFilesAnalyser.main(args);
         String got = Helpers.stopRecordingSout();
-        Assert.azzert(got.contains(allPresentAndCorrect));
+        Assert.azzert(got.contains(allPresentAndCorrect), "Got: " + got);
         return true;
     }
 
@@ -50,7 +50,9 @@ public class ResultFilesAnalyserTest {
         Helpers.startRecordingSout();
         ResultFilesAnalyser.main(args);
         String got = Helpers.stopRecordingSout();
-        String expected = "Analysing results files and classes..." + NL +
+        String expected = "Number of unit test packages: 1." + NL +
+                "Number of function and load tests: 2." + NL +
+                "Analysing results files and classes..." + NL +
                 "Classes directory: " + Helpers.classesDirClassic().getAbsolutePath() + NL +
                 "Log file directory: " + new File(Dir6.PATH).getAbsolutePath() + "." + NL +
                 "Log files:" + NL +
@@ -68,7 +70,9 @@ public class ResultFilesAnalyserTest {
         Helpers.startRecordingSout();
         ResultFilesAnalyser.main(args);
         String got = Helpers.stopRecordingSout();
-        String expected = "Analysing results files and classes..." + NL +
+        String expected = "Number of unit test packages: 1." + NL +
+                "Number of function and load tests: 2." + NL +
+                "Analysing results files and classes..." + NL +
                 "Classes directory: " + Helpers.classesDirClassic().getAbsolutePath() + NL +
                 "Log file directory: " + new File(Dir7.PATH).getAbsolutePath() + "." + NL +
                 "Log files:" + NL +
@@ -88,7 +92,9 @@ public class ResultFilesAnalyserTest {
         ResultFilesAnalyser.main(args);
         String got = Helpers.stopRecordingSout();
         String failedPackageMessage = Messages.message(Messages.OPK_ONE_OR_MORE_TESTS_FAILED_IN, "a36.functiontest");
-        String expected = "Analysing results files and classes..." + NL +
+        String expected = "Number of unit test packages: 1." + NL +
+                "Number of function and load tests: 2." + NL +
+                "Analysing results files and classes..." + NL +
                 "Classes directory: " + Helpers.classesDirClassic().getAbsolutePath() + NL +
                 "Log file directory: " + new File(Dir8.PATH).getAbsolutePath() + "." + NL +
                 "Log files:" + NL +
