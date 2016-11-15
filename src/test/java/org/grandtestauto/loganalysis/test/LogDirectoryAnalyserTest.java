@@ -1,5 +1,6 @@
 package org.grandtestauto.loganalysis.test;
 
+import org.assertj.core.api.Assertions;
 import org.grandtestauto.GTALogger;
 import org.grandtestauto.Messages;
 import org.grandtestauto.PackageResult;
@@ -137,6 +138,31 @@ public class LogDirectoryAnalyserTest {
         Assert.aequals(0l, lda.runAutoLoadTestPackage(true, classNames, "rippledown.admin.functiontest").timeTakenInMillis());
         Assert.azzertNull(lda.runAutoLoadTestPackage(true, classNames, "rippledown.admin.functiontest").errorMessage());
         checkNoExceptions();
+        return true;
+    }
+
+    /**
+     * lw-8823
+     */
+    public boolean logFunctionTestNamesTest() throws Exception {
+        init(Dir4.PATH);
+        Collection<String> classNames = Arrays.asList("AddOnlineFormsProject", "DefaultUsersFunctionTest", "ExportOnlineProject");
+        Assert.azzert(lda.runAutoLoadTestPackage(true, classNames, "rippledown.admin.functiontest").passed());
+        Assert.aequals(0l, lda.runAutoLoadTestPackage(true, classNames, "rippledown.admin.functiontest").timeTakenInMillis());
+        Assert.azzertNull(lda.runAutoLoadTestPackage(true, classNames, "rippledown.admin.functiontest").errorMessage());
+        System.out.println("loggedMessages size = " + loggedMessages.size());
+        List<String> expected = new ArrayList<>();
+        expected.add("rippledown.admin.functiontest.AddOnlineFormsProject");
+        expected.add("rippledown.admin.functiontest.DefaultUsersFunctionTest");
+        expected.add("rippledown.admin.functiontest.EditServerSetting");
+        expected.add("rippledown.admin.functiontest.ExportOnlineProject");
+        expected.add("rippledown.attribute.loadtest.TextCondenserNormalisationLoadTest");
+        expected.add("rippledown.bmd.loadtest.ExportPatientsTest");
+        expected.add("rippledown.bmd.loadtest.OpenBigDatabaseTest");
+        expected.add("Number of unit test packages: 0.");
+        expected.add("Number of function and load tests: 7.");
+        Assert.aequals(expected, loggedMessages);
+
         return true;
     }
 

@@ -27,7 +27,7 @@ import java.util.concurrent.*;
  */
 public class LogDirectoryAnalyser implements DoPackageWork {
     private Map<String, Boolean> unitTestPackageDone = new HashMap<String, Boolean>();
-    private Map<String, Boolean> functionTestsDone = new HashMap<String, Boolean>();
+    private Map<String, Boolean> functionTestsDone = new TreeMap<String, Boolean>();
     private File logsDirectory;
     private GTALogger resultsLogger;
 
@@ -50,6 +50,9 @@ public class LogDirectoryAnalyser implements DoPackageWork {
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
+        }
+        for (String functionTestName : functionTestsDone.keySet()){
+            resultsLogger.log(functionTestName, null);
         }
         executor.shutdown();
         resultsLogger.log(Messages.message(Messages.OPK_NUMBER_OF_UNIT_TEST_PACKAGES, Integer.toString(unitTestPackageDone.size())), null);

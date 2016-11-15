@@ -1,14 +1,13 @@
 /****************************************************************************
  * Copyright 2012 Timothy Gordon Lavers (Australia)
- *
- *                          The Wide Open License (WOL)
- *
+ * <p>
+ * The Wide Open License (WOL)
+ * <p>
  * Permission to use, copy, modify, distribute and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
  * the above copyright notice and this license appear in all source copies.
  * THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT EXPRESS OR IMPLIED WARRANTY OF
  * ANY KIND. See http://www.dspguru.com/wol.htm for more information.
- *
  *****************************************************************************/
 package org.grandtestauto.test;
 
@@ -50,7 +49,9 @@ public class ResultFilesAnalyserTest {
         Helpers.startRecordingSout();
         ResultFilesAnalyser.main(args);
         String got = Helpers.stopRecordingSout();
-        String expected = "Number of unit test packages: 1." + NL +
+        String expected = "a36.functiontest.FT" + NL +
+                "a36.loadtest.LT" + NL +
+                "Number of unit test packages: 1." + NL +
                 "Number of function and load tests: 2." + NL +
                 "Analysing results files and classes..." + NL +
                 "Classes directory: " + Helpers.classesDirClassic().getAbsolutePath() + NL +
@@ -70,7 +71,9 @@ public class ResultFilesAnalyserTest {
         Helpers.startRecordingSout();
         ResultFilesAnalyser.main(args);
         String got = Helpers.stopRecordingSout();
-        String expected = "Number of unit test packages: 1." + NL +
+        String expected = "a36.functiontest.FT" + NL +
+                "a36.loadtest.LT" + NL +
+                "Number of unit test packages: 1." + NL +
                 "Number of function and load tests: 2." + NL +
                 "Analysing results files and classes..." + NL +
                 "Classes directory: " + Helpers.classesDirClassic().getAbsolutePath() + NL +
@@ -92,7 +95,9 @@ public class ResultFilesAnalyserTest {
         ResultFilesAnalyser.main(args);
         String got = Helpers.stopRecordingSout();
         String failedPackageMessage = Messages.message(Messages.OPK_ONE_OR_MORE_TESTS_FAILED_IN, "a36.functiontest");
-        String expected = "Number of unit test packages: 1." + NL +
+        String expected = "a36.functiontest.FT" + NL +
+                "a36.loadtest.LT" + NL +
+                "Number of unit test packages: 1." + NL +
                 "Number of function and load tests: 2." + NL +
                 "Analysing results files and classes..." + NL +
                 "Classes directory: " + Helpers.classesDirClassic().getAbsolutePath() + NL +

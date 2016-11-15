@@ -1,3 +1,7 @@
+plugins {
+    id 'net.researchgate.release' version '2.3.5'
+}
+
 apply plugin: 'maven'
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -47,16 +51,10 @@ sourceSets {
         compileClasspath += configurations.compile
     }
     test {
-//        output.classesDir = "$buildDir/classes/test"
-//        output.resourcesDir = "$buildDir/resources/test"
         java {
             srcDirs = ["$projectDir/src/test/java", generatedSrcPath]
             exclude '**/test/tools/*.java'
         }
-//        resources {
-//            srcDirs = ["$projectDir/src/test/resources"]
-////            include '**/*'
-//        }
         compileClasspath += configurations.tools + files("$buildDir/classes/test")
     }
 }
