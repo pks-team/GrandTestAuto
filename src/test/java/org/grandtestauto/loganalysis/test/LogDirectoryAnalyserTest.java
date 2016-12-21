@@ -1,6 +1,5 @@
 package org.grandtestauto.loganalysis.test;
 
-import org.assertj.core.api.Assertions;
 import org.grandtestauto.GTALogger;
 import org.grandtestauto.Messages;
 import org.grandtestauto.PackageResult;
