@@ -1,6 +1,6 @@
 ########### Running Load Tests ###########
 Running Load Tests in a36.loadtest....
-LT passed, 0s
+LT passed, 30s
 >>>> Results of Load Tests for a36.loadtest: passed. <<<< 0.001s. 245M.
 ******* Overall Load Test Result: passed. *******
 !!!!!!!!!!!!!Overall Test Result: passed !!!!!!!!!!!!!

@@ -36,5 +36,6 @@ public class ResultFilesAnalyser {
         gta.resultsLogger().log( "Analysing results files and classes...", null );
         gta.resultsLogger().log( "Classes directory: " + classesDirectory.getAbsolutePath(), null);
         gta.runAllTests();
+        gta.resultsLogger().log( "Total time for tests: " + lda.totalTestingTime(), null );
     }
 }

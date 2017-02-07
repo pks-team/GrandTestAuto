@@ -60,7 +60,8 @@ public class ResultFilesAnalyserTest {
                 "TestLog1.txt" + NL +
                 "TestLog2.log" + NL +
                 "TestLog3.txt" + NL +
-                allPresentAndCorrect + NL;
+                allPresentAndCorrect + NL +
+                "Total time for tests: 40" + NL;
         Assert.aequals(expected, got);
         return true;
     }
@@ -83,7 +84,8 @@ public class ResultFilesAnalyserTest {
                 "TestLog2.log" + NL +
                 "TestLog3.txt" + NL +
                 "Unit tests failed for a36." + NL +
-                "Testing problems, as shown." + NL;
+                "Testing problems, as shown." + NL +
+                "Total time for tests: 0" + NL;
         Assert.aequals(expected, got);
         return true;
     }
@@ -107,7 +109,8 @@ public class ResultFilesAnalyserTest {
                 "TestLog2.log" + NL +
                 "TestLog3.txt" + NL +
                 failedPackageMessage + NL +
-                "Testing problems, as shown." + NL;
+                "Testing problems, as shown." + NL  +
+                "Total time for tests: 0" + NL;
         Assert.aequals(expected, got);
         return true;
     }

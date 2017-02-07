@@ -11,6 +11,7 @@ import org.grandtestauto.test.dataconstants.org.grandtestauto.loganalysis.dir2.D
 import org.grandtestauto.test.dataconstants.org.grandtestauto.loganalysis.dir3.Dir3;
 import org.grandtestauto.test.dataconstants.org.grandtestauto.loganalysis.dir4.Dir4;
 import org.grandtestauto.test.dataconstants.org.grandtestauto.loganalysis.dir5.Dir5;
+import org.grandtestauto.test.dataconstants.org.grandtestauto.loganalysis.dir6.Dir6;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -24,7 +25,13 @@ public class LogDirectoryAnalyserTest {
     private List<String> loggedMessages;
     private List<Throwable> loggedExceptions;
     private L log;
-    
+
+    public boolean totalTestingTimeTest() throws Exception {
+        init(Dir6.PATH);
+        Assert.aequals(40L, lda.totalTestingTime());
+        return true;
+    }
+
     public boolean preliminaryMessagesTest() throws Exception {
         init(Dir3.PATH);
         List<String> expected = new LinkedList<String>();
@@ -149,7 +156,6 @@ public class LogDirectoryAnalyserTest {
         Assert.azzert(lda.runAutoLoadTestPackage(true, classNames, "rippledown.admin.functiontest").passed());
         Assert.aequals(0l, lda.runAutoLoadTestPackage(true, classNames, "rippledown.admin.functiontest").timeTakenInMillis());
         Assert.azzertNull(lda.runAutoLoadTestPackage(true, classNames, "rippledown.admin.functiontest").errorMessage());
-        System.out.println("loggedMessages size = " + loggedMessages.size());
         List<String> expected = new ArrayList<>();
         expected.add("rippledown.admin.functiontest.AddOnlineFormsProject");
         expected.add("rippledown.admin.functiontest.DefaultUsersFunctionTest");

@@ -15,9 +15,12 @@ package org.grandtestauto.loganalysis;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
 import org.grandtestauto.Messages;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -29,22 +32,24 @@ import java.util.regex.Pattern;
  * @author Tim Lavers
  */
 public class LogFileAnalyser {
-    private Map<String, Boolean> unitTestResults = new HashMap<String, Boolean>();
-    private Map<String, Boolean> functionTestResults = new HashMap<String, Boolean>();
+    private Map<String, Boolean> unitTestResults = new HashMap<>();
+    private Map<String, Double> unitTestTimes = new HashMap<>();
+    private Map<String, Boolean> functionTestResults = new HashMap<>();
+    private Map<String, Double> functionTestTimes = new HashMap<>();
     private static String PASSED;
     private static String FAILED;
     private static String UNIT_TEST_PACKAGE_PATTERN;
     private static String FUNCTION_TEST_PACKAGE_START_PATTERN;
-    private static String TEST_RESULT_PATTERN = "(\\S*) (passed|failed), (\\d*,?\\d*(\\.\\d*)?)s";
+    public static final String TIME_PATTERN = "(\\d*,?\\d*(\\.\\d*)?)s";
+    private static String TEST_RESULT_PATTERN = "(\\S*) (passed|failed), " + TIME_PATTERN;
 
     static {
         PASSED = Messages.message(Messages.SK_PASSED);
         FAILED = Messages.message(Messages.SK_FAILED);
         String resultGroup = "(" + PASSED + "|" + FAILED + ")";
-        UNIT_TEST_PACKAGE_PATTERN = Messages.message(Messages.TPK_UNIT_TEST_PACK_RESULTS, "(.*)", resultGroup);
+        UNIT_TEST_PACKAGE_PATTERN = Messages.message(Messages.TPK_UNIT_TEST_PACK_RESULTS, "(.*)", resultGroup) + "\\D*" + TIME_PATTERN;
         FUNCTION_TEST_PACKAGE_START_PATTERN = Messages.message(Messages.SK_RUNNING_FUNCTION_OR_LOAD_TESTS_PATTERN);
     }
-
 
     public LogFileAnalyser(File logFile) throws IOException {
         Pattern utPattern = Pattern.compile(UNIT_TEST_PACKAGE_PATTERN);
@@ -60,6 +65,11 @@ public class LogFileAnalyser {
                     String packageName = utMatcher.group(1);
                     String passedOrFailed = utMatcher.group(2);
                     unitTestResults.put(packageName, PASSED.equals(passedOrFailed));
+                    String timeStr = utMatcher.group(3);
+                    Double time = parseTime(timeStr);
+                    if (time != null) {
+                        unitTestTimes.put(packageName, time);
+                    }
                     continue;
                 }
                 Matcher ftStartMatcher = ftStartPattern.matcher(line);
@@ -72,6 +82,11 @@ public class LogFileAnalyser {
                     String testName = currentFTPackage + "." + testResultMatcher.group(1);
                     String passedOrFailed = testResultMatcher.group(2);
                     functionTestResults.put(testName, PASSED.equals(passedOrFailed));
+                    String timeStr = testResultMatcher.group(3);
+                    Double time = parseTime(timeStr);
+                    if (time != null) {
+                        functionTestTimes.put(testName, time);
+                    }
                 }
             }
         } finally {
@@ -79,8 +94,29 @@ public class LogFileAnalyser {
         }
     }
 
+    @Nullable
+    private Double parseTime(String timeStr) {
+        DecimalFormat format = new DecimalFormat("#,###.000");
+        Number parse;
+        try {
+            parse = format.parse(timeStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return 0D;
+        }
+        return parse.doubleValue();
+    }
+
     public Map<String, Boolean> unitTestPackageResults() {
         return unitTestResults;
+    }
+
+    public Map<String, Double> unitTestPackageTimes() {
+        return unitTestTimes;
+    }
+
+    public Map<String, Double> functionAndLoadTestTimes() {
+        return functionTestTimes;
     }
 
     public Map<String, Boolean> functionAndLoadTestResults() {

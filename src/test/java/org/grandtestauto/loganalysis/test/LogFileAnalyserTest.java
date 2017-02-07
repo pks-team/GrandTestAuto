@@ -87,6 +87,53 @@ public class LogFileAnalyserTest {
         return true;
     }
 
+    public boolean unitTestPackageTimesTest() throws Exception {
+        init(Loganalysis.Log0_txt);
+        Assert.azzert(lfa.unitTestPackageTimes().isEmpty());
+
+        init(Loganalysis.Log1_txt);
+        Assert.aequals(1, lfa.unitTestPackageTimes().size());
+        Assert.aequals(0.796, lfa.unitTestPackageTimes().get("org.grandtestauto"));
+
+        init(Loganalysis.Log2_txt);
+        Assert.aequals(5, lfa.unitTestPackageTimes().size());
+        Assert.aequals(311.313, lfa.unitTestPackageTimes().get("fruit.apple"));
+        Assert.aequals(0.177, lfa.unitTestPackageTimes().get("fruit.apple.core"));
+        Assert.aequals(5.435, lfa.unitTestPackageTimes().get("fruit.apple.seed"));
+        Assert.aequals(7.329, lfa.unitTestPackageTimes().get("fruit.apple.skin"));
+        Assert.aequals(0.095, lfa.unitTestPackageTimes().get("fruit.apple.validate"));
+
+        return true;
+    }
+
+    public boolean functionAndLoadTestTimesTest() throws Exception {
+        init(Loganalysis.Log0_txt);
+        Assert.azzert(lfa.functionAndLoadTestTimes().isEmpty());
+
+        init(Loganalysis.FT0_log);
+        Assert.aequals(13, lfa.functionAndLoadTestTimes().size());
+        Assert.aequals(22.08, lfa.functionAndLoadTestTimes().get("rippledown.admin.functiontest.AddOnlineFormsProject"));
+        Assert.aequals( 30.08, lfa.functionAndLoadTestTimes().get("rippledown.admin.functiontest.DefaultUsersFunctionTest"));
+        Assert.aequals(42.826, lfa.functionAndLoadTestTimes().get("rippledown.admin.functiontest.EditServerSetting"));
+        Assert.aequals(37.055, lfa.functionAndLoadTestTimes().get("rippledown.admin.functiontest.ExportOnlineProject"));
+        Assert.aequals(45.957, lfa.functionAndLoadTestTimes().get("rippledown.admin.functiontest.ExportOperationOverwrites"));
+        Assert.aequals(83.266, lfa.functionAndLoadTestTimes().get("rippledown.admin.functiontest.ExportProject"));
+        Assert.aequals(16.691, lfa.functionAndLoadTestTimes().get("rippledown.admin.functiontest.ImportPrimaryAttributesForAdmini"));
+        Assert.aequals(44.912, lfa.functionAndLoadTestTimes().get("rippledown.admin.functiontest.PerformHouseKeepingOnDemand"));
+        Assert.aequals(39.173, lfa.functionAndLoadTestTimes().get("rippledown.admin.functiontest.PersistEmailComment"));
+        Assert.aequals(27.612, lfa.functionAndLoadTestTimes().get("rippledown.admin.functiontest.ProjectCanBeExportedWhileEdited"));
+        Assert.aequals(47.088, lfa.functionAndLoadTestTimes().get("rippledown.admin.functiontest.PurgeEmailComment"));
+        Assert.aequals(45.712, lfa.functionAndLoadTestTimes().get("rippledown.admin.functiontest.RetryEmailComment"));
+        Assert.aequals(40.842, lfa.functionAndLoadTestTimes().get("rippledown.admin.functiontest.UpdateDefaultGroupAndUserFunctionTest"));
+
+        init(Loganalysis.LT0_txt);
+        Assert.aequals(3, lfa.functionAndLoadTestTimes().size());
+        Assert.aequals(3.669, lfa.functionAndLoadTestTimes().get("rippledown.attribute.loadtest.TextCondenserNormalisationLoadTest"));
+        Assert.aequals(126.937, lfa.functionAndLoadTestTimes().get("rippledown.bmd.loadtest.ExportPatientsTest"));
+        Assert.aequals(123110.216, lfa.functionAndLoadTestTimes().get("rippledown.bmd.loadtest.OpenBigDatabaseTest"));
+
+        return true;
+    }
     private void  init(String logFileName) throws Exception {
         lfa = new LogFileAnalyser(new File(logFileName));
     }

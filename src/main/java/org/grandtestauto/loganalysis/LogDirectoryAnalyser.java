@@ -27,6 +27,7 @@ import java.util.concurrent.*;
  */
 public class LogDirectoryAnalyser implements DoPackageWork {
     private Map<String, Boolean> unitTestPackageDone = new HashMap<String, Boolean>();
+    private Double totalTestingTime = 0D;
     private Map<String, Boolean> functionTestsDone = new TreeMap<String, Boolean>();
     private File logsDirectory;
     private GTALogger resultsLogger;
@@ -45,6 +46,8 @@ public class LogDirectoryAnalyser implements DoPackageWork {
             try {
                 unitTestPackageDone.putAll(task.get().unitTestPackageResults());
                 functionTestsDone.putAll(task.get().functionAndLoadTestResults());
+                task.get().unitTestPackageTimes().values().forEach(d -> totalTestingTime += d);
+                task.get().functionAndLoadTestTimes().values().forEach(d -> totalTestingTime += d);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
@@ -59,6 +62,9 @@ public class LogDirectoryAnalyser implements DoPackageWork {
         resultsLogger.log(Messages.message(Messages.OPK_NUMBER_OF_AUTOLOAD_TESTS, Integer.toString(functionTestsDone.size())), null);
     }
 
+    public Long totalTestingTime() {
+        return totalTestingTime.longValue();
+    }
     public Map<String, Boolean> unitTestPackageResults() {
         return unitTestPackageDone;
     }
