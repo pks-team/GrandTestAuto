@@ -1,0 +1,52 @@
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+ext {
+    s3repoBaseUrl = "s3://pks-archive/maven"
+    awsAccessKey = "AKIAIXBGF7V3D4GIDO3Q"
+    awsSecretKey = "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"
+}
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+repositories {
+    maven {
+        // formerly mavenCentral() but we need to use http
+        url "http://repo1.maven.org/maven2/"
+    }
+    maven { url "http://repo.spring.io/release" }
+    maven {
+        name "s3RepoInternal"
+        url "$s3repoBaseUrl/internal"
+        credentials(AwsCredentials) {
+            accessKey awsAccessKey
+            secretKey awsSecretKey
+        }
+    }
+    maven {
+        name "s3RepoSnapshots"
+        url "$s3repoBaseUrl/snapshots"
+        credentials(AwsCredentials) {
+            accessKey awsAccessKey
+            secretKey awsSecretKey
+        }
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId 'org.grandtestauto'
+            artifactId 'gta'
+            from components.java
+            artifact sourceJar {
+                classifier "sources"
+            }
+        }
+    }
+    repositories {
+        add project.version.endsWith('-SNAPSHOT') ? project.repositories.s3RepoSnapshots : project.repositories.s3RepoInternal
+    }
+}
