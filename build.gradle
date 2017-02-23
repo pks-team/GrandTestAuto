@@ -2,7 +2,6 @@ plugins {
     id 'net.researchgate.release' version '2.3.5'
 }
 
-apply from: 'repositories.gradle'
 apply plugin: 'maven'
 apply plugin: 'java'
 apply plugin: 'idea'
